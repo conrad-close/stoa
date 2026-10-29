@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# q <tool> '<json-args>' [label]  — call a REA tool through the local driver, save to analysis/q-<label>.json,
+# and print a compact view (text content + top-level structured keys).
+set -euo pipefail
+tool="$1"; args="${2:-{\}}"; label="${3:-$tool}"
+root="$(cd "$(dirname "$0")/../.." && pwd)"
+out="$root/analysis/q-${label}.json"
+curl -s -m 7200 "localhost:${REA_DRIVER_PORT:-7331}/call" -H 'content-type: application/json' \
+  -d "{\"name\":\"$tool\",\"arguments\":$args}" > "$out"
+python3 -I - "$out" <<'PY'
+import json,sys
+d=json.load(open(sys.argv[1]))
+if 'error' in d: print('ERROR:', json.dumps(d['error'])[:1500]); sys.exit(1)
+if d.get('isError'): print('TOOL ERROR:', ''.join(c.get('text','') for c in d.get('content',[]))[:1500]); sys.exit(1)
+sc=d.get('structuredContent')
+if isinstance(sc,dict):
+    def walk(o,depth=0):
+        if isinstance(o,dict):
+            for k,v in list(o.items())[:30]:
+                if isinstance(v,(dict,list)):
+                    n=len(v); print('  '*depth+f'{k}: {type(v).__name__}[{n}]')
+                    if depth<1 and isinstance(v,dict): walk(v,depth+1)
+                else: print('  '*depth+f'{k} = {str(v)[:120]}')
+    walk(sc)
+else:
+    print(''.join(c.get('text','') for c in d.get('content',[]))[:2000])
+PY
+echo "saved: $out"
