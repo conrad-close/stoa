@@ -21,7 +21,7 @@ public enum StoaStore {
 
     /// In-memory container for tests and previews.
     public static func makeInMemoryContainer() throws -> ModelContainer {
-        let config = ModelConfiguration("Stoa", schema: schema, isStoredInMemoryOnly: true)
+        let config = ModelConfiguration("Stoa-\(UUID().uuidString)", schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [config])
     }
 
