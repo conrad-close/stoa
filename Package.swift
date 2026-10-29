@@ -13,5 +13,6 @@ let package = Package(
         .target(name: "StoaCore"),
         .target(name: "StoaWeb", dependencies: ["StoaCore"]),
         .testTarget(name: "StoaCoreTests", dependencies: ["StoaCore"]),
+        .testTarget(name: "StoaWebTests", dependencies: ["StoaWeb", "StoaCore"]),
     ]
 )

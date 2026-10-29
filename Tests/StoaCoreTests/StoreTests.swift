@@ -25,9 +25,9 @@ struct StoreTests {
         let context = container.mainContext
         let session = try StoaStore.ensureBaseline(in: context)
         let space = try #require(session.spaces.first)
-        let a = Tab(url: URL(string: "https://a.example"), title: "a", order: 0)
-        let b = Tab(url: URL(string: "https://b.example"), title: "b", order: 1)
-        let c = Tab(url: URL(string: "https://c.example"), title: "c", order: 2)
+        let a = BrowserTab(url: URL(string: "https://a.example"), title: "a", order: 0)
+        let b = BrowserTab(url: URL(string: "https://b.example"), title: "b", order: 1)
+        let c = BrowserTab(url: URL(string: "https://c.example"), title: "c", order: 2)
         c.isPinned = true
         for t in [a, b, c] { t.space = space; context.insert(t) }
         try context.save()

@@ -4,7 +4,7 @@ import SwiftData
 /// Builds the app's model container and enforces first-launch invariants.
 public enum StoaStore {
     public static let schema = Schema([
-        Profile.self, BrowserSession.self, Space.self, SplitContainer.self, Tab.self,
+        Profile.self, BrowserSession.self, Space.self, SplitContainer.self, BrowserTab.self,
         HistoryItem.self, BookmarkFolder.self, Bookmark.self, DownloadItem.self, StickyNote.self,
         Setting.self, SitePermission.self, BlockingRule.self,
     ])

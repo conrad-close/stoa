@@ -62,8 +62,8 @@ public final class Space {
     public var createdAt: Date
     public var modifiedAt: Date
 
-    @Relationship(deleteRule: .cascade, inverse: \Tab.space)
-    public var tabs: [Tab] = []
+    @Relationship(deleteRule: .cascade, inverse: \BrowserTab.space)
+    public var tabs: [BrowserTab] = []
 
     @Relationship(deleteRule: .cascade, inverse: \SplitContainer.space)
     public var splitContainers: [SplitContainer] = []
@@ -90,7 +90,7 @@ public final class Space {
     }
 
     /// Pinned tabs first (by order), then the strip (by order).
-    public var orderedTabs: [Tab] {
+    public var orderedTabs: [BrowserTab] {
         tabs.sorted {
             if $0.isPinned != $1.isPinned { return $0.isPinned }
             return $0.order < $1.order
@@ -117,8 +117,8 @@ public final class SplitContainer {
     public var createdAt: Date
     public var modifiedAt: Date
 
-    @Relationship(inverse: \Tab.splitContainer)
-    public var panes: [Tab] = []
+    @Relationship(inverse: \BrowserTab.splitContainer)
+    public var panes: [BrowserTab] = []
 
     public var direction: SplitDirection {
         get { SplitDirection(rawValue: directionRaw) ?? .horizontal }
@@ -140,11 +140,11 @@ public final class SplitContainer {
         self.modifiedAt = now
     }
 
-    public var orderedPanes: [Tab] { panes.sorted { ($0.splitPaneIndex ?? 0) < ($1.splitPaneIndex ?? 0) } }
+    public var orderedPanes: [BrowserTab] { panes.sorted { ($0.splitPaneIndex ?? 0) < ($1.splitPaneIndex ?? 0) } }
 }
 
 @Model
-public final class Tab {
+public final class BrowserTab {
     @Attribute(.unique) public var id: UUID
     public var space: Space?
     public var splitContainer: SplitContainer?
