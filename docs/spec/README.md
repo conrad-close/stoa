@@ -4,6 +4,7 @@ One file per feature area, each derived from REA + Ghidra evidence against Ortix
 
 | Area | File | Status |
 |---|---|---|
+| Data model: profiles, sessions, spaces, splits, tabs, memory, policy | `00-data-model.md` | draft v1 |
 | App shell: window, sidebar, compact rail, address bar | `01-shell.md` | pending |
 | Tabs, pins, keyboard navigation | `02-tabs.md` | pending |
 | Spaces and per-space wallpaper | `03-spaces.md` | pending |
