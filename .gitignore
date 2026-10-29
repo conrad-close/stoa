@@ -1,0 +1,18 @@
+# Xcode / SwiftPM
+.build/
+DerivedData/
+*.xcodeproj/
+!*.xcodeproj/project.pbxproj.keep
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# REA / Ghidra evidence — large, local, regenerated from the snapshot
+analysis/
+
+# macOS
+.DS_Store
