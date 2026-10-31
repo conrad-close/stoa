@@ -334,7 +334,11 @@ final class NativeMessagingHandler: NSObject {
 
             if let json = try? JSONSerialization.jsonObject(with: jsonData, options: [.fragmentsAllowed]) {
                 DispatchQueue.main.async { [weak self] in
-                    self?.port?.sendMessage(json) { _ in }
+                    self?.port?.sendMessage(json) { error in
+                        if let error {
+                            Self.logger.error("Could not deliver host message to the extension: \(error.localizedDescription, privacy: .public)")
+                        }
+                    }
                 }
             } else {
                 Self.logger.error("Failed to parse JSON from host (\(jsonData.count) bytes)")
