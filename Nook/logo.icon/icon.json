@@ -1,55 +1,55 @@
 {
-  "fill" : {
-    "automatic-gradient" : "display-p3:0.97656,0.97266,0.95703,1.00000"
+  "fill": {
+    "automatic-gradient": "display-p3:0.96000,0.95000,0.99000,1.00000"
   },
-  "groups" : [
+  "groups": [
     {
-      "layers" : [
+      "layers": [
         {
-          "fill-specializations" : [
+          "fill-specializations": [
             {
-              "value" : {
-                "linear-gradient" : [
-                  "display-p3:0.16309,0.29785,0.22192,1.00000",
-                  "display-p3:0.03540,0.07703,0.05994,1.00000"
+              "value": {
+                "linear-gradient": [
+                  "display-p3:0.36000,0.28000,0.86000,1.00000",
+                  "display-p3:0.16000,0.10000,0.42000,1.00000"
                 ]
               }
             },
             {
-              "appearance" : "dark",
-              "value" : {
-                "linear-gradient" : [
-                  "display-p3:0.82959,0.93311,0.70703,1.00000",
-                  "display-p3:0.68115,0.87158,0.46851,1.00000"
+              "appearance": "dark",
+              "value": {
+                "linear-gradient": [
+                  "display-p3:0.86000,0.83000,1.00000,1.00000",
+                  "display-p3:0.66000,0.60000,0.98000,1.00000"
                 ]
               }
             },
             {
-              "appearance" : "tinted",
-              "value" : {
-                "solid" : "display-p3:0.36620,0.68093,0.52321,1.00000"
+              "appearance": "tinted",
+              "value": {
+                "solid": "display-p3:0.52000,0.46000,0.92000,1.00000"
               }
             }
           ],
-          "glass" : false,
-          "image-name" : "Light Mode.svg",
-          "name" : "Logo"
+          "glass": false,
+          "image-name": "Stoa.svg",
+          "name": "Stoa"
         }
       ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
       },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
+      "translucency": {
+        "enabled": true,
+        "value": 0.5
       }
     }
   ],
-  "supported-platforms" : {
-    "circles" : [
+  "supported-platforms": {
+    "circles": [
       "watchOS"
     ],
-    "squares" : "shared"
+    "squares": "shared"
   }
 }

@@ -1,5 +1,19 @@
 # CLAUDE.md
 
+## Stoa Fork (read first)
+
+This checkout is **Stoa**, Conrad Close's fork of Nook (GitHub `conrad-close/stoa`, forked 2026-10-31 from Nook v1.4.0). Everything below this section is upstream Nook's guidance and still applies to the code, with these differences:
+
+- **Remotes and branches**: `origin` = `conrad-close/stoa`, `upstream` = `nook-browser/Nook`. Stoa work goes on `main`. Pull upstream with `git fetch upstream --tags && git merge upstream/develop` (or a release tag). Never push to upstream.
+- **Identity**: built app is `Stoa.app`, bundle id `com.conradclose.stoa` (so it never shares data with an installed Nook). Project, scheme, target, Swift module (`PRODUCT_MODULE_NAME = Nook`), packages and code identifiers keep Nook's names on purpose so upstream merges stay clean. Rename only what a user sees. Nook's TRADEMARK.md requires the fork's name and icon to differ: never ship the Nook name or icon in UI.
+- **App-support folders** that upstream hard-codes as "Nook" (extensions, AI config, native-messaging hosts) are "Stoa" here.
+- **Updates**: Sparkle auto-checks are off; `SUFeedURL` points at a Stoa appcast that does not exist yet, and `SUPublicEDKey` is removed so a Nook-signed update can never install over Stoa.
+- **Signing**: no Apple certificate on this Mac. Builds are ad-hoc signed with `Nook-CI.entitlements` (see README). Build into `~/Library/Caches/stoa-build`, never inside this iCloud-synced folder.
+- **AI stays.** Conrad keeps Nook's AI features as-is.
+- **Stoa's own feature specs** (home page, wallpapers, icon rail, media dock, four-pane split tree, collections) came from the archived clean-room repo `conrad-close/stoa-cleanroom` (`docs/spec/`); a local copy lives in `docs/stoa-spec/` (gitignored like all of `docs/`).
+- **User-visible text rule** below still applies: Conrad approves new copy.
+
+
 This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project Overview

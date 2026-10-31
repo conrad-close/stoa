@@ -62,7 +62,7 @@ public protocol PageSessionDelegate: AnyObject {
 
     // MARK: Chrome Web Store
 
-    /// Installs the "Add to Nook" handler and script on a store page. Returns the handler to
+    /// Installs the "Add to Stoa" handler and script on a store page. Returns the handler to
     /// retain for the life of the page, or nil when the URL is not a store page.
     func installWebStoreScript(in webView: WKWebView) -> AnyObject?
     func removeWebStoreHandler(from controller: WKUserContentController)

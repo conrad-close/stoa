@@ -181,7 +181,7 @@ final class AuthenticationManager: NSObject {
         alert.alertStyle = .warning
         alert.messageText = "The certificate for \(key) cannot be verified"
         alert.informativeText = known == nil
-            ? "Nook cannot confirm that this is really \(space.host). Someone on your network could be answering in its place. Continue only if you expect this device to use a self-signed certificate."
+            ? "Stoa cannot confirm that this is really \(space.host). Someone on your network could be answering in its place. Continue only if you expect this device to use a self-signed certificate."
             : "The certificate has CHANGED since it was last accepted. A reset or replaced device does that, and so does someone intercepting the connection."
         // Cancel first, so Return takes the safe choice.
         alert.addButton(withTitle: "Cancel")

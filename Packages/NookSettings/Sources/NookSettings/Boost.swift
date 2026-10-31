@@ -271,10 +271,10 @@ public enum BoostBundle {
     public static func parse(_ data: Data) throws -> [Boost] {
         guard data.count <= maxBytes else { throw Failure(message: "The file is larger than 2 MB.") }
         guard let file = try? JSONDecoder().decode(File.self, from: data) else {
-            throw Failure(message: "This is not a Nook Boost file.")
+            throw Failure(message: "This is not a Stoa Boost file.")
         }
         guard file.schema <= Boost.schemaVersion else {
-            throw Failure(message: "This file was made by a newer version of Nook.")
+            throw Failure(message: "This file was made by a newer version of Stoa.")
         }
         guard file.boosts.count <= Boost.maxCount else { throw Failure(message: "Too many Boosts in one file.") }
         return try file.boosts.map { b in

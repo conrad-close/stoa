@@ -105,7 +105,7 @@ struct NookCommands: Commands {
         // Replace the standard Quit menu item to route through showQuitDialog(),
         // which respects the "warn before quitting" setting
         CommandGroup(replacing: .appTermination) {
-            Button("Quit Nook") {
+            Button("Quit Stoa") {
                 browserManager.showQuitDialog()
             }
             .keyboardShortcut("q", modifiers: .command)
@@ -114,7 +114,7 @@ struct NookCommands: Commands {
         // App Menu Section (under Nook)
         CommandGroup(after: .appInfo) {
             Divider()
-            Button("Make Nook Default Browser") {
+            Button("Make Stoa Default Browser") {
                 browserManager.setAsDefaultBrowser()
             }
 

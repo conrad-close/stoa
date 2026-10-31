@@ -94,7 +94,7 @@ actor MCPClient {
             "protocolVersion": MCPAnyCodable("2024-11-05"),
             "capabilities": MCPAnyCodable([String: Any]()),
             "clientInfo": MCPAnyCodable([
-                "name": "Nook",
+                "name": "Stoa",
                 "version": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
             ])
         ]

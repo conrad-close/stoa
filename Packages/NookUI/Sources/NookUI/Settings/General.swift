@@ -39,8 +39,8 @@ public struct SettingsGeneralTab: View {
             #if os(macOS)
             // Quitting and Sparkle updates are both macOS-only concepts.
             Section {
-                Toggle("Warn before quitting Nook", isOn: $settings.askBeforeQuit)
-                Toggle("Automatically update Nook", isOn: .constant(true))
+                Toggle("Warn before quitting Stoa", isOn: $settings.askBeforeQuit)
+                Toggle("Automatically update Stoa", isOn: .constant(true))
                     .disabled(true)
             }
 

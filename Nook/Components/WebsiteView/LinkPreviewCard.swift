@@ -226,7 +226,7 @@ struct LinkPreviewCard: View {
             Text(host)
                 .foregroundStyle(Self.footerInk)
             Spacer()
-            Text("Nook")
+            Text("Stoa")
                 .fontWeight(.bold)
                 .foregroundStyle(Self.footerInk)
         }

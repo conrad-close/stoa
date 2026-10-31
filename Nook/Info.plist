@@ -2,22 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>CFBundleURLName</key>
-			<string>Web Site URL</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>http</string>
-				<string>https</string>
-			</array>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-		</dict>
-	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -33,6 +17,22 @@
 				<string>public.xhtml</string>
 				<string>public.url</string>
 			</array>
+		</dict>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>Web Site URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>http</string>
+				<string>https</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
 		</dict>
 	</array>
 	<key>NSAppTransportSecurity</key>
@@ -53,13 +53,11 @@
 	<key>SUAutomaticallyUpdate</key>
 	<true/>
 	<key>SUEnableAutomaticChecks</key>
-	<true/>
+	<false/>
 	<key>SUEnableDowngrade</key>
 	<false/>
 	<key>SUFeedURL</key>
-	<string>https://nook-browser.github.io/Nook/appcast.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>oWrc3J4HWz5PEVE5fIMKj5fEnCUwqYl0bO1li3xOYM4=</string>
+	<string>https://conrad-close.github.io/stoa/appcast.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
 	<key>SUUpdateRelaunchDelay</key>
@@ -99,7 +97,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Nook Tab Drag Item</string>
+			<string>Stoa Tab Drag Item</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.nook.tab-drag-item</string>
 		</dict>

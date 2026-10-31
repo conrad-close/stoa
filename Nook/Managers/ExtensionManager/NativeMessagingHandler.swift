@@ -235,7 +235,7 @@ final class NativeMessagingHandler: NSObject {
     // MARK: - Host lookup
 
     private static let manifestDirectories = [
-        "Library/Application Support/Nook/NativeMessagingHosts",
+        "Library/Application Support/Stoa/NativeMessagingHosts",
         "Library/Application Support/Google/Chrome/NativeMessagingHosts",
         "Library/Application Support/Chromium/NativeMessagingHosts",
         "Library/Application Support/Microsoft Edge/NativeMessagingHosts",

@@ -30,7 +30,7 @@ struct ShortcutsSettingsView: View {
                     set: { WebsiteShortcutProfile.isFeatureEnabled = $0 }
                 ))
             } footer: {
-                Text("When a website uses the same shortcut, press once for the website, twice for Nook.")
+                Text("When a website uses the same shortcut, press once for the website, twice for Stoa.")
             }
 
             ForEach(ShortcutCategory.allCases, id: \.self) { category in

@@ -3,7 +3,7 @@
 //  LinkPreviewGate.swift
 //  Nook
 //
-//  The pure part of "may Nook fetch this link for a preview". Nothing a page links to reaches
+//  The pure part of "may Stoa fetch this link for a preview". Nothing a page links to reaches
 //  a private network, a local device or the person's own machine on Nook's behalf.
 //
 

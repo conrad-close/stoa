@@ -18,7 +18,7 @@ extension TabsController {
             let alert = NSAlert()
             alert.alertStyle = .warning
             alert.messageText = "Tabs could not be loaded"
-            alert.informativeText = "Nook is running without saving tab changes because \(reason). The files are in \(directory.path)."
+            alert.informativeText = "Stoa is running without saving tab changes because \(reason). The files are in \(directory.path)."
             alert.addButton(withTitle: "OK")
             alert.runModal()
         }

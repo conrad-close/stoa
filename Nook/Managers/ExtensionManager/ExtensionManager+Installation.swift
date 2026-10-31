@@ -886,7 +886,7 @@ extension ExtensionManager {
             for: .applicationSupportDirectory,
             in: .userDomainMask
         ).first!
-        return appSupport.appendingPathComponent("Nook").appendingPathComponent(
+        return appSupport.appendingPathComponent("Stoa").appendingPathComponent(
             "Extensions"
         )
     }

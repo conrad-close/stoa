@@ -113,7 +113,7 @@ public struct BoostPanel: View {
             if isDirty { save() }
         }
         .fileExporter(isPresented: $exporting, document: BoostFile(data: BoostBundle.export(settings.boosts) ?? Data()),
-                      contentType: .json, defaultFilename: "Nook Boosts") { _ in }
+                      contentType: .json, defaultFilename: "Stoa Boosts") { _ in }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
             guard let url = try? result.get() else { return }
             let scoped = url.startAccessingSecurityScopedResource()

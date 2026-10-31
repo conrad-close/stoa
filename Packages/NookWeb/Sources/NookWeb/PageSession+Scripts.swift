@@ -251,7 +251,7 @@ extension PageSession {
 
     // MARK: - Chrome Web Store Integration
 
-    /// Inject the Web Store "Add to Nook" script after navigation completes on a store page.
+    /// Inject the Web Store "Add to Stoa" script after navigation completes on a store page.
     /// Script and message handler both live in an isolated content world, so page scripts
     /// on any site (including the store itself) cannot call the install handler.
     func injectWebStoreScriptIfNeeded(for url: URL, in webView: WKWebView) {
