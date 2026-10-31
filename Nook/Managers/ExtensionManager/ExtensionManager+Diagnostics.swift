@@ -21,6 +21,39 @@ extension ExtensionManager {
     }
 }
 
+// MARK: - Context Errors
+
+extension ExtensionManager {
+
+    /// Log every error WebKit records on an extension context, with its underlying errors.
+    /// WebKit's own "Error recorded" line prints only the code, which says nothing about
+    /// why a service worker failed to start.
+    func observeContextErrors() {
+        NotificationCenter.default.addObserver(
+            forName: WKWebExtensionContext.errorsDidUpdateNotification,
+            object: nil,
+            queue: .main
+        ) { note in
+            guard let context = note.object as? WKWebExtensionContext else { return }
+            let name = context.webExtension.displayName ?? context.uniqueIdentifier
+            for error in context.errors {
+                Self.logger.error("[ContextError] '\(name, privacy: .public)': \(Self.describe(error as NSError), privacy: .public)")
+            }
+        }
+    }
+
+    private static func describe(_ error: NSError, depth: Int = 0) -> String {
+        var parts = ["\(error.domain) \(error.code): \(error.localizedDescription)"]
+        for (key, value) in error.userInfo where key != NSUnderlyingErrorKey && key != NSLocalizedDescriptionKey {
+            parts.append("\(key)=\(value)")
+        }
+        if depth < 3, let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError {
+            parts.append("underlying: [\(describe(underlying, depth: depth + 1))]")
+        }
+        return parts.joined(separator: " | ")
+    }
+}
+
 // MARK: - Extension Diagnostics (Debug builds only)
 
 #if DEBUG

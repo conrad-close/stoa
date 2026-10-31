@@ -75,6 +75,7 @@ final class ExtensionManager: NSObject, ObservableObject,
         super.init()
 
         if isExtensionSupportAvailable {
+            observeContextErrors()
             setupExtensionController()
             loadInstalledExtensions()
             registerInternalNativePortHandlers()

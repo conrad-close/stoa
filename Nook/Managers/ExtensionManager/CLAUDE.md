@@ -19,6 +19,8 @@ Deployment target is macOS 15.5, so WKWebExtension (15.4+) and content scripts (
 | `ExtensionManager+TabNotifications.swift` | Tab and window adapters, AppKit window focus/close observation, scoped URL grants, action anchors |
 | `ExtensionManager+PageSessionHooks.swift` | Tab events `TabsController` and `PageSession` call: opened, activated, closed, moved, properties changed |
 | `NativeMessagingHandler.swift` | Host manifest lookup with `allowed_origins` enforcement, host process I/O, single-shot and port modes |
+| `NativeHostProcess.swift` | (Stoa) `posix_spawn` launcher that keeps a host in the browser's process group; replaces Foundation `Process` |
+| `ExtensionManager+APIShim.swift` | (Stoa) Stand-ins for Chrome APIs WebKit lacks, loaded ahead of every extension background |
 | `BitwardenBiometricHandler.swift` | In-process host for Bitwarden's `.appex` `connectNative("com.8bit.bitwarden")` biometric unlock: prompts Touch ID (LocalAuthentication) and returns the symmetric key from the `Bitwarden_biometric` Keychain service, so no Bitwarden desktop app is required |
 | `InternalNativePortHandler.swift` | Small protocol for in-process native message port handlers |
 | `PopupUIDelegate.swift` | `PopupClipboardHandler` (JS↔native clipboard bridge via WKScriptMessageHandler) + `PopupUIDelegate` (WKUIDelegate for popup webviews) |
@@ -122,6 +124,8 @@ Looks up host manifests in order:
 
 A manifest is used only if `name` equals the host name, `type` is stdio, `path` is absolute, the binary is executable under an allowed prefix, and the caller is allowed: `allowed_origins` contains `chrome-extension://<id>/` (store and key-derived IDs only) or `nook-extension://<id>/`. Firefox `allowed_extensions` is ignored: a gecko ID is only what the caller's own manifest claims, and nothing binds it the way AMO signing does. A Mozilla-directory manifest is still used when it also lists a matching `allowed_origins` entry. Extensions with UUID IDs cannot reach third-party hosts; reinstall from the store to get a Chrome ID.
 
+**Hosts launch through `NativeHostProcess`, never Foundation `Process` (Stoa).** `Process` puts each child in a new process group; 1Password's BrowserSupport then fails with "BrowserSupport was not part of the main browser's tree" (`BrowserVerificationFail`) and the port closes. Its log is `~/Library/Group Containers/2BUA8C4S2C.com.1password/Library/Application Support/1Password/Data/logs/BrowserSupport/`. 1Password also requires the browser to be added under Settings > Browser, which needs a real Team ID signature (no ad-hoc).
+
 Protocol: 4-byte native-endian length prefix + JSON, 1 MB cap. Single-shot mode (5 s timeout) and long-lived ports. All callbacks into WebKit run on the main thread; port handlers stay retained in `nativeMessagingHandlers` until the port disconnects or the host exits.
 
 **Message port handler signature**: `messageHandler` is `(message, error)`. Code before September 2026 read the error slot as the message, so in-process port handlers (Bitwarden biometrics) never received messages.
@@ -165,7 +169,13 @@ WebContent processes are sandboxed and **cannot access the system pasteboard** (
 
 **Key WKWebView gotcha**: `webView.configuration` returns a **copy** each time. Setting `preferences.setValue(...)` on it modifies a temporary. However, `userContentController` IS a shared reference — adding script message handlers through it works.
 
+## Chrome API Shim (Stoa)
+
+WebKit has no `notifications`, `idle`, `management`, `privacy`, `downloads` or `storage.managed`, and lacks some events (`webNavigation.onCreatedNavigationTarget`, `runtime.onSuspend`, ...). A Chrome extension that touches one at startup throws and its worker never runs; for 1Password that meant a popup spinning forever ("Opening popup without background page: wake timed out"). `patchManifestForWebKit` calls `installAPIShim`, which points an MV3 `service_worker` at `nook_sw_entry.js` (imports `nook_api_shim.js`, then the original worker) or puts the shim first in MV2 `background.scripts`. **WebKit rebuilds `browser.<namespace>` on every read**, so properties added to `browser` or its namespaces do not stick (a deleted and redefined `webNavigation` reads back as WebKit's); the shim replaces the `browser`/`chrome` globals with proxies instead. Add a missing API to `shims`, a missing event to `events`, a missing nested member to `members`.
+
 ## Diagnostics
+
+Release and Debug: `observeContextErrors()` logs every `WKWebExtensionContext` error with its text and source location under `[ContextError]` (WebKit's own line prints only the code). An extension's `console.error` reaches it too. Read with `/usr/bin/log show --predicate 'subsystem == "com.nook.browser"' --info`.
 
 Debug builds only (`#if DEBUG`):
 - `probeBackgroundHealth()` — Runs at +3s and +8s after background load; reads the private `_backgroundWebView` only after a `responds(to:)` check (plain KVC on a renamed key raises) and evaluates a capability probe.

@@ -35,7 +35,7 @@ final class NativeMessagingHandler: NSObject {
 
     // Port mode state (main thread only)
     private weak var port: WKWebExtension.MessagePort?
-    private var process: Process?
+    private var process: NativeHostProcess?
     private var inputHandle: FileHandle?
     private var pendingMessages: [Any] = []
     private var isClosed = false
@@ -83,18 +83,14 @@ final class NativeMessagingHandler: NSObject {
                 return finish(nil, Self.error(.hostNotFound, "Native messaging host \(applicationId) not found or not allowed for this extension"))
             }
 
-            let process = Process()
-            let input = Pipe()
-            let output = Pipe()
-            process.executableURL = executable
-            process.arguments = callerOrigins.sorted().filter { $0.hasPrefix("chrome-extension://") }
-            process.standardInput = input
-            process.standardOutput = output
-            process.standardError = FileHandle.nullDevice
+            let process = NativeHostProcess(
+                executableURL: executable,
+                arguments: callerOrigins.sorted().filter { $0.hasPrefix("chrome-extension://") }
+            )
 
             do {
                 try process.run()
-                try Self.write(message, to: input.fileHandleForWriting)
+                try Self.write(message, to: process.input)
             } catch {
                 process.terminate()
                 return finish(nil, error)
@@ -105,7 +101,7 @@ final class NativeMessagingHandler: NSObject {
             let done = DispatchSemaphore(value: 0)
             DispatchQueue.global(qos: .userInitiated).async {
                 defer { done.signal() }
-                let handle = output.fileHandleForReading
+                let handle = process.output!
                 let lengthData = handle.readData(ofLength: 4)
                 guard lengthData.count == 4 else {
                     readError = Self.error(.hostClosed, "Host closed without response")
@@ -158,34 +154,29 @@ final class NativeMessagingHandler: NSObject {
                 return
             }
 
-            let process = Process()
-            let input = Pipe()
-            let output = Pipe()
-            process.executableURL = executable
-            process.arguments = self.callerOrigins.sorted().filter { $0.hasPrefix("chrome-extension://") }
-            process.standardInput = input
-            process.standardOutput = output
-            process.standardError = FileHandle.nullDevice
-
-            output.fileHandleForReading.readabilityHandler = { [weak self] handle in
-                let data = handle.availableData
-                if data.isEmpty {
-                    handle.readabilityHandler = nil
-                } else {
-                    self?.handleOutput(data)
-                }
-            }
-            process.terminationHandler = { [weak self] _ in
+            let process = NativeHostProcess(
+                executableURL: executable,
+                arguments: self.callerOrigins.sorted().filter { $0.hasPrefix("chrome-extension://") }
+            )
+            process.terminationHandler = { [weak self] in
                 DispatchQueue.main.async { self?.close(disconnectPort: true) }
             }
 
             do {
                 try process.run()
             } catch {
-                output.fileHandleForReading.readabilityHandler = nil
                 Self.logger.error("Failed to launch host \(self.applicationId, privacy: .public): \(error.localizedDescription, privacy: .public)")
                 DispatchQueue.main.async { hostAvailability(false) }
                 return
+            }
+            // Output already written is buffered in the pipe, so attaching the reader now loses nothing.
+            process.output.readabilityHandler = { [weak self] handle in
+                let data = handle.availableData
+                if data.isEmpty {
+                    handle.readabilityHandler = nil
+                } else {
+                    self?.handleOutput(data)
+                }
             }
 
             DispatchQueue.main.async {
@@ -194,7 +185,7 @@ final class NativeMessagingHandler: NSObject {
                     return
                 }
                 self.process = process
-                self.inputHandle = input.fileHandleForWriting
+                self.inputHandle = process.input
                 let queued = self.pendingMessages
                 self.pendingMessages.removeAll()
                 queued.forEach { self.post($0) }

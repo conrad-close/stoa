@@ -988,6 +988,11 @@ extension ExtensionManager {
             }
         }
 
+        // --- Chrome APIs WebKit lacks (notifications, idle, ...): shim ahead of the background ---
+        if Self.installAPIShim(in: &manifest, packageDir: manifestURL.deletingLastPathComponent()) {
+            changed = true
+        }
+
         if changed {
             if let updatedData = try? JSONSerialization.data(withJSONObject: manifest, options: [.prettyPrinted, .sortedKeys]) {
                 try? updatedData.write(to: manifestURL)
