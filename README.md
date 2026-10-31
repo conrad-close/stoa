@@ -30,8 +30,13 @@ xcodebuild -downloadComponent MetalToolchain   # once
 xcodebuild -scheme Nook -configuration Release -arch arm64 -derivedDataPath ~/Library/Caches/stoa-build \
   ENABLE_CODE_COVERAGE=NO CLANG_COVERAGE_MAPPING=NO \
   CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM="" CODE_SIGN_IDENTITY="-" \
-  CODE_SIGN_ENTITLEMENTS="$PWD/Nook/Nook-CI.entitlements" CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO
+  CODE_SIGN_ENTITLEMENTS="$PWD/Nook/Nook-CI.entitlements" CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
+  RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION=YES
+ditto ~/Library/Caches/stoa-build/Build/Products/Release/Stoa.app /Applications/Stoa.app
 ```
+
+Ad-hoc signing has no team ID, so the hardened runtime refuses to load the bundled Sparkle
+framework unless library validation is relaxed; a Developer ID build would not need that flag.
 
 ## Staying Current With Nook
 
