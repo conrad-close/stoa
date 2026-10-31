@@ -29,14 +29,16 @@ changes merge cleanly; the built app is `Stoa.app` with bundle id `com.conradclo
 xcodebuild -downloadComponent MetalToolchain   # once
 xcodebuild -scheme Nook -configuration Release -arch arm64 -derivedDataPath ~/Library/Caches/stoa-build \
   ENABLE_CODE_COVERAGE=NO CLANG_COVERAGE_MAPPING=NO \
-  CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM="" CODE_SIGN_IDENTITY="-" \
-  CODE_SIGN_ENTITLEMENTS="$PWD/Nook/Nook-CI.entitlements" CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
-  RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION=YES
+  CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=64T9BLGJ9V CODE_SIGN_IDENTITY="Apple Development" \
+  CODE_SIGN_ENTITLEMENTS="$PWD/Nook/Nook-CI.entitlements" CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO
 ditto ~/Library/Caches/stoa-build/Build/Products/Release/Stoa.app /Applications/Stoa.app
 ```
 
-Ad-hoc signing has no team ID, so the hardened runtime refuses to load the bundled Sparkle
-framework unless library validation is relaxed; a Developer ID build would not need that flag.
+`64T9BLGJ9V` is Conrad's Apple Development team. A real team ID matters: 1Password only trusts
+browsers whose signature names one. Without a certificate, sign ad-hoc instead
+(`DEVELOPMENT_TEAM="" CODE_SIGN_IDENTITY="-"` plus `RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION=YES`,
+since an ad-hoc app cannot otherwise load its own Sparkle framework); that build runs but
+1Password will refuse it.
 
 ## Staying Current With Nook
 
